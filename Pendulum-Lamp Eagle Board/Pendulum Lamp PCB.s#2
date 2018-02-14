@@ -10380,10 +10380,8 @@ Source: 3M</description>
 <wire x1="254" y1="60.96" x2="254" y2="66.04" width="0.1524" layer="91"/>
 <junction x="254" y="66.04"/>
 <label x="165.1" y="66.04" size="1.778" layer="95"/>
+<wire x1="208.28" y1="134.62" x2="208.28" y2="66.04" width="0.1524" layer="91"/>
 <junction x="208.28" y="66.04"/>
-<pinref part="X1" gate="-4" pin="KL"/>
-<wire x1="208.28" y1="147.32" x2="208.28" y2="66.04" width="0.1524" layer="91"/>
-<wire x1="154.94" y1="147.32" x2="208.28" y2="147.32" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="V_SERVO" class="0">
@@ -10496,10 +10494,8 @@ Source: 3M</description>
 <label x="218.44" y="15.24" size="1.778" layer="95"/>
 <label x="83.82" y="83.82" size="1.778" layer="95"/>
 <label x="99.06" y="38.1" size="1.778" layer="95"/>
-<wire x1="205.74" y1="152.4" x2="205.74" y2="15.24" width="0.1524" layer="91"/>
+<wire x1="205.74" y1="132.08" x2="205.74" y2="15.24" width="0.1524" layer="91"/>
 <junction x="205.74" y="15.24"/>
-<pinref part="X1" gate="-2" pin="KL"/>
-<wire x1="205.74" y1="152.4" x2="154.94" y2="152.4" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$3" class="0">
