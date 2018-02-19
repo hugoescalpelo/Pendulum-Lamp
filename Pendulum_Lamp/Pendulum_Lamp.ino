@@ -1,15 +1,24 @@
 /*
  * Iván Abreu Studio.
  * 
- * 12/2/2018
+ * 19/2/2018
  * 
- * The point of this program is to keep a pendulum moving.
+ * The point of this program is to keep a pendulum lamp moving.
  * 
- * To get that, is needed to begin the movement to a big amplitude
- * The increase of amplitude has to be gradual.
+ * To get that we read a sensor array and pull to the oposite side
+ * of the array. The array detects the lamp wire, ergo, pendulum positon.
  * 
- * Then, when max amplitude is reached, the period of the pendulum
- * is changed by a sinusoidal factor.
+ * The max aplitud has to be sustanied.
+ * 
+ * Other goals of future versions:
+ *  -Manual control of earthquake intensity
+ *  -Feed of historic earthquakes behaviour
+ * 
+ * V1. Micro servo
+ * V2. Solenoid
+ * V3. Micro reducer
+ * V4. Mid Servo
+ * V4.1. Sensor Array
  * 
  * Team:
  * 
@@ -20,62 +29,37 @@
  */
 
  //Libraries
- #include <Servo.h>
+#include <Servo.h>
 
  //Objects
- Servo myservo;
+Servo myServo;
 
  //Variables
- int pos = 0;
- int posA = 150;
- int posB = 30;
+ int pinSensor [8];
+ volatile int dataSensor [8];
 
- long timeNow = 0;
- long timeLast = millis ();
- int timeStep = 1000;
- int threshold = 850;
- int cutStageZero = 10;
 
- bool pingPong = 0;
- byte stage = 0;
-
- float angle = 0.5;
- int adrf = 30; //Stands for anti destructive resonace factor
-
-void setup() {
-
-  //Servo initializer
-  myservo.attach (9);
-
+ //Setup
+ void setup ()
+ {
   Serial.begin (115200);
+  Serial.println ("inicio");
+  //pinset
+  //myServo.attach (3);
 
-}
-
-void loop() {
-  timeNow = millis ();
-  if (timeNow - timeLast >= timeStep){
-    if (pingPong == 0){
-      myservo.write (posA);
-      pingPong = 1;
-      timeLast = timeNow;
-    }
-    else{
-      myservo.write (posB);
-      pingPong = 0;
-      timeLast = timeNow;
-    }
-    if (stage == 0){
-      if (timeStep > threshold){
-        timeStep -= cutStageZero;
-      }
-      else{
-        stage = 1;
-      }
-    }
-    else{
-      timeStep = timeStep + (adrf* cos (angle));
-      angle += 0.5;
-    }
-    Serial.println (timeStep);
+  for (int i = 4; i <= 11; i++)
+  {
+    pinSensor [i - 4] = i;
+    pinMode (pinSensor [i - 4], INPUT);
   }
+  readAll ();
+  printAllSensors ();
+ }
+
+void loop ()
+{
+  delay (10);
+  readAll ();
+  printAllSensors ();
 }
+
