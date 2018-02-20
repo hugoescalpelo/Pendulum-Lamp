@@ -41,6 +41,11 @@ byte aData;//This cicle data readed
 int pos_bin;//Binary position
 int pos_indx;//decimal position
 
+const int angle_a = 30;
+const int angle_b = 150;
+int angle = angle_a;
+char intensity = 8.1;
+bool polar = 0;//0 right, 1 left
 
 //Setup
 void setup ()
@@ -58,6 +63,9 @@ void setup ()
   //First call. Test the lecture
   readAll ();
   printAllSensors ();
+
+  //First impulse
+  myServo.write (angle);
 }
 
 void loop ()
@@ -66,15 +74,16 @@ void loop ()
   {
     pos_bin = lowByte (aData);
     pos_indx = getPosition (pos_bin);
-    Serial.print ("l= ");
-    Serial.print (pos_bin);
-    Serial.print (" p= ");
-    Serial.println (pos_indx);
+
+    printBinaries ();
+
+    impulse (intensity);//Impulse in 'intensity' proportion assensor detects
+    
     lData = aData;//Sets a trace of readings
   }
   readAll ();
   aData = ~aData;
   printAllSensors ();
-  delay (100);
+  //delay (100);
 }
 

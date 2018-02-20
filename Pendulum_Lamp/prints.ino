@@ -5,3 +5,11 @@ void printAllSensors ()
   Serial.println ();
 }
 
+void printBinaries ()
+{
+  Serial.print ("l= ");
+  Serial.print (pos_bin);
+  Serial.print (" p= ");
+  Serial.println (pos_indx);
+}
+
