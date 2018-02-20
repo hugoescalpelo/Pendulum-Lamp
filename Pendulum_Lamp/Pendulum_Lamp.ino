@@ -36,7 +36,8 @@ Servo myServo;
 
  //Variables
  int pinSensor [8];
- volatile int dataSensor [8];
+ byte lData;
+ byte aData;
 
 
  //Setup
@@ -44,8 +45,7 @@ Servo myServo;
  {
   Serial.begin (115200);
   Serial.println ("inicio");
-  //pinset
-  //myServo.attach (3);
+  myServo.attach (3);
 
   for (int i = 4; i <= 11; i++)
   {
@@ -58,8 +58,9 @@ Servo myServo;
 
 void loop ()
 {
-  delay (10);
+  lData = aData;
   readAll ();
   printAllSensors ();
+  delay (100);
 }
 
