@@ -51,6 +51,8 @@ int angle = angle_a;
 char intensity = 8.1;
 bool polar = 0;//0 right, 1 left
 
+double timeLast, timeNow;
+
 //Setup
 void setup ()
 {
@@ -72,6 +74,7 @@ void setup ()
   myServo.write (90);
   delay (2000);
   startEngine ();
+  timeNow = millis ();
 }
 
 void loop ()
@@ -85,11 +88,15 @@ void loop ()
     printAllSensors ();
 
     impulse (intensity);//Impulse in 'intensity' proportion assensor detects
-    
+
     lData = aData;//Sets a trace of readings
+    timeLast = timeNow;
   }
   readAll ();
   aData = ~aData;
+  timeNow = millis ();
+  takeMeOut ();
+  
   //delay (100);
 }
 

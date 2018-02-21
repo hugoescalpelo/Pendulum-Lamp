@@ -37,3 +37,26 @@ void impulse (char r)//R stands for richter
   delay (r_wait);
 }
 
+void takeMeOut ()
+{
+  if (timeNow - timeLast > 1500)
+  {
+    Serial.println ("Take me out");
+    //myServo.write (angle);
+    timeLast = timeNow;
+
+    if (polar == 1)
+    {
+      angle = angle_b;
+      myServo.write (angle);
+      polar = 0;
+    }
+    else if (polar == 0)
+    {
+      angle = angle_a;
+      myServo.write (angle);
+      polar = 1;
+    }
+  }
+}
+
