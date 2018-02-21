@@ -1,7 +1,7 @@
 /*
    Iván Abreu Studio.
 
-   19/2/2018
+   20/2/2018
 
    The point of this program is to keep a pendulum lamp moving.
 
@@ -14,11 +14,15 @@
     -Manual control of earthquake intensity
     -Feed of historic earthquakes behaviour
 
+   ChangeLog
    V1. Micro servo
    V2. Solenoid
    V3. Micro reducer
    V4. Mid Servo
    V4.1. Sensor Array
+   V4.2. Binary lecture
+   V4.3. Servo sync
+   V4.4. Succesful auto sync
 
    Team:
 
@@ -65,7 +69,9 @@ void setup ()
   printAllSensors ();
 
   //First impulse
-  myServo.write (angle);
+  myServo.write (90);
+  delay (2000);
+  startEngine ();
 }
 
 void loop ()
@@ -76,6 +82,7 @@ void loop ()
     pos_indx = getPosition (pos_bin);
 
     printBinaries ();
+    printAllSensors ();
 
     impulse (intensity);//Impulse in 'intensity' proportion assensor detects
     
@@ -83,7 +90,6 @@ void loop ()
   }
   readAll ();
   aData = ~aData;
-  printAllSensors ();
   //delay (100);
 }
 
