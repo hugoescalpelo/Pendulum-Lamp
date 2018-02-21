@@ -3,7 +3,7 @@ int getPosition (int btp)//Btp stands for bit position
   switch (btp)
   {
     case 0:
-      return (pos_indx);
+      return (0);
       break;
 
     case 1:

@@ -45,13 +45,13 @@ byte aData;//This cicle data readed
 int pos_bin;//Binary position
 int pos_indx;//decimal position
 
-const int angle_a = 30;
-const int angle_b = 150;
+const int angle_a = 40;
+const int angle_b = 140;
 int angle = angle_a;
 char intensity = 8.1;
 bool polar = 0;//0 right, 1 left
 
-double timeLast, timeNow;
+//double timeLast, timeNow;
 
 //Setup
 void setup ()
@@ -74,28 +74,29 @@ void setup ()
   myServo.write (90);
   delay (2000);
   startEngine ();
-  timeNow = millis ();
+  //timeNow = millis ();
 }
 
 void loop ()
 {
-  if (lData != aData)
+  if (lData != aData && aData != 0)
   {
     pos_bin = lowByte (aData);
     pos_indx = getPosition (pos_bin);
 
     printBinaries ();
-    printAllSensors ();
+    //printAllSensors ();
 
     impulse (intensity);//Impulse in 'intensity' proportion assensor detects
 
-    lData = aData;//Sets a trace of readings
-    timeLast = timeNow;
+    
+    //timeLast = timeNow;
   }
   readAll ();
+  lData = aData;//Sets a trace of readings
   aData = ~aData;
-  timeNow = millis ();
-  takeMeOut ();
+  //timeNow = millis ();
+  //takeMeOut ();
   
   //delay (100);
 }
