@@ -45,18 +45,30 @@ byte aData;//This cicle data readed
 int pos_bin;//Binary position
 int pos_indx;//decimal position
 
-const int angle_a = 60;
-const int angle_b = 80;
+int angle_a =40;
+int max_a = 20;
+int min_a =75;
+
+int angle_b = 140;
+int max_b = 160;
+int min_b = 115;
+
 int angle = angle_a;
-char intensity = 6.5;//5.5 to 8.7
+float intensity = 8.1;//5.5 to 8.7
+float min_r = 55;
+float max_r = 87;
+
 bool polar = 0;//0 right, 1 left
+
+int rWaitMax = 200;
+int rWaitMin = 10;
 
 double timeLast, timeNow;
 
 //Setup
 void setup ()
 {
-  Serial.begin (115200);//Begin serial communication
+  Serial.begin (2000000);//Begin serial communication
   Serial.println ("inicio");
   myServo.attach (3);//Begin servo at pin 3
 
@@ -84,7 +96,7 @@ void loop ()
     pos_bin = lowByte (aData);
     pos_indx = getPosition (pos_bin);
 
-    printBinaries ();
+    //printBinaries ();
     //printAllSensors ();
 
     impulse (intensity);//Impulse in 'intensity' proportion assensor detects
@@ -97,6 +109,24 @@ void loop ()
   aData = ~aData;
   timeNow = millis ();
   takeMeOut ();
+
+  if (Serial.available () > 0)//5.5 to 8
+  {
+    float data = Serial.parseFloat ();
+    if (data < 10)
+    {
+      intensity = data;
+      Serial.print ("Last intensity ");
+      Serial.print (intensity, 1);
+      Serial.print (" New intensity ");
+      Serial.println (intensity, 2);
+    }
+    else if (data == 15)
+    {
+      takeMeOut ();
+    }
+    
+  }
   
   //delay (100);
 }

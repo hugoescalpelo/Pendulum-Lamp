@@ -18,8 +18,16 @@ void startEngine ()
   }
 }
 
-void impulse (char r)//R stands for richter
+void impulse (float r)//R stands for richter
 {
+  int rr = r * 10;
+  int r_wait = map (rr, min_r, max_r, rWaitMax, rWaitMin);
+  
+  angle_a = map (rr, min_r, max_r, min_a, max_a);
+  angle_b = map (rr, min_r, max_r, min_b, max_b);
+  
+  delay (r_wait);
+  
   if (polar == 1 && pos_indx <= 4)
   {
     angle = angle_b;
@@ -32,9 +40,8 @@ void impulse (char r)//R stands for richter
     myServo.write (angle);
     polar = 1;
   }
-  int rr = r * 10;
-  int r_wait = map (rr, 55, 87, 1000, 10);
-  delay (r_wait);
+  
+  
 }
 
 void takeMeOut ()
