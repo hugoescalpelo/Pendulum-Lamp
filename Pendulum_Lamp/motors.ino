@@ -1,5 +1,6 @@
 void startEngine ()
 {
+  refreshRichter (intensity);
   for (int i = 0; i < 15; i++)
   {
     if (polar == 0)
@@ -18,13 +19,9 @@ void startEngine ()
   }
 }
 
-void impulse (float r)//R stands for richter
+void impulse (float ri)//ri stands for richter impulse
 {
-  int rr = r * 10;
-  int r_wait = map (rr, min_r, max_r, rWaitMax, rWaitMin);
-  
-  angle_a = map (rr, min_r, max_r, min_a, max_a);
-  angle_b = map (rr, min_r, max_r, min_b, max_b);
+  refreshRichter (ri);
   
   delay (r_wait);
   
@@ -64,6 +61,7 @@ void takeMeOut ()
       myServo.write (angle);
       polar = 1;
     }
+    timeLast = timeNow;
   }
 }
 

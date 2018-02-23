@@ -1,7 +1,7 @@
 /*
    Iván Abreu Studio.
 
-   20/2/2018
+   23/2/2018
 
    The point of this program is to keep a pendulum lamp moving.
 
@@ -23,6 +23,7 @@
    V4.2. Binary lecture
    V4.3. Servo sync
    V4.4. Succesful auto sync
+   v4.4.1 Added proportional servo movement
 
    Team:
 
@@ -45,31 +46,34 @@ byte aData;//This cicle data readed
 int pos_bin;//Binary position
 int pos_indx;//decimal position
 
-int angle_a =40;
-int max_a = 20;
+int angle_a =40;//Ignition angle by right
+int max_a = 20;//Limits
 int min_a =75;
 
-int angle_b = 140;
-int max_b = 160;
+int angle_b = 140;//Ingnition angle by left
+int max_b = 160;//Limits
 int min_b = 115;
 
-int angle = angle_a;
-float intensity = 8.1;//5.5 to 8.7
-float min_r = 55;
+int angle = angle_a;//First asociation
+
+float intensity = 6.5;//5.5 to 8.7 richter degree
+float min_r = 55;//Limits
 float max_r = 87;
 
-bool polar = 0;//0 right, 1 left
+bool polar = 0;//0 right, 1 left. Indicates whic side the wire is
 
-int rWaitMax = 200;
+int rWaitMax = 220;//Wait before move servo
 int rWaitMin = 10;
+int r_wait;
 
-double timeLast, timeNow;
+double timeLast, timeNow;//Time tracking variables
 
 //Setup
 void setup ()
 {
   Serial.begin (2000000);//Begin serial communication
   Serial.println ("inicio");
+  
   myServo.attach (3);//Begin servo at pin 3
 
   for (int i = 0; i < 8; i++)//fancy way to set all pins as INPUT
@@ -80,9 +84,9 @@ void setup ()
 
   //First call. Test the lecture
   readAll ();
-  printAllSensors ();
+  //printAllSensors ();
 
-  //First impulse
+  //Ignition sequence
   myServo.write (90);
   delay (2000);
   startEngine ();
@@ -119,7 +123,7 @@ void loop ()
       Serial.print ("Last intensity ");
       Serial.print (intensity, 1);
       Serial.print (" New intensity ");
-      Serial.println (intensity, 2);
+      Serial.println (intensity, 1);
     }
     else if (data == 15)
     {
