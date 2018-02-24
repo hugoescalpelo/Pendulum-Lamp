@@ -24,6 +24,7 @@
    V4.3. Servo sync
    V4.4. Succesful auto sync
    v4.4.1 Added proportional servo movement
+   V4.4.2 Fix to takeMeOut sequence
 
    Team:
 
@@ -58,7 +59,7 @@ int min_b = 115;
 
 int angle = angle_a;//First asociation
 
-float intensity = 5.5;//5.5 to 8.7 richter degree
+float intensity = 8.5;//5.5 to 8.7 richter degree
 float min_r = 55;//Limits
 float max_r = 87;
 
@@ -97,6 +98,10 @@ void setup ()
 
 void loop ()
 {
+
+  readAll ();
+  aData = ~aData;//Not to all bits
+
   if (lData != aData && aData != 0)
   {
     last_pos_bin = pos_bin;
@@ -110,35 +115,20 @@ void loop ()
     impulse (intensity);//Impulse in 'intensity' proportion assensor detects
   }
 
-  if (last_pos_indx != pos_indx)
+  //Here it can be added an asynchronous sequence to update de angle of the servos
+  //as function of intensity.
+  //An index of degrees to go and target degrees could do the thing
+
+  timeNow = millis ();
+  takeMeOut ();
+  if (last_pos_indx != pos_indx);//Keep track of stuck time
   {
     timeLast = timeNow;
   }
 
-  readAll ();
   lData = aData;//Sets a trace of readings
-  aData = ~aData;
-  timeNow = millis ();
-  takeMeOut ();
 
-  if (Serial.available () > 0)//5.5 to 8
-  {
-    float data = Serial.parseFloat ();
-    if (data < 10)
-    {
-      Serial.print ("Last intensity ");
-      Serial.print (intensity, 1);
-      intensity = data;
-      Serial.print (" New intensity ");
-      Serial.println (intensity, 1);
-    }
-    else if (data == 15)
-    {
-      takeMeOut ();
-    }
-
-  }
-
+  listenPort ();
   //delay (100);
 }
 
