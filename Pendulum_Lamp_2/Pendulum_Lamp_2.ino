@@ -58,7 +58,7 @@ int min_b = 115;
 
 int angle = angle_a;//First asociation
 
-float intensity = 5.5;//5.5 to 8.7 richter degree
+float intensity = 7.5;//5.5 to 8.7 richter degree
 float min_r = 55;//Limits
 float max_r = 87;
 
@@ -97,6 +97,9 @@ void setup ()
 
 void loop ()
 {
+  readAll ();
+  aData = ~aData;
+
   if (lData != aData && aData != 0)
   {
     last_pos_bin = pos_bin;
@@ -105,9 +108,20 @@ void loop ()
     pos_indx = getPosition (pos_bin);
 
     //printBinaries ();
-    //printAllSensors ();
+    printAllSensors ();
 
     impulse (intensity);//Impulse in 'intensity' proportion assensor detects
+
+//    int dirrr = readDirection ();
+//    Serial.println (dirrr);
+//    if (dirrr > 0)
+//    {
+//      Serial.println ("Der");
+//    }
+//    else if (dirrr < 0)
+//    {
+//      Serial.println ("Izq");
+//    }
   }
 
   if (last_pos_indx != pos_indx)
@@ -115,9 +129,10 @@ void loop ()
     timeLast = timeNow;
   }
 
-  readAll ();
   lData = aData;//Sets a trace of readings
-  aData = ~aData;
+
+
+
   timeNow = millis ();
   takeMeOut ();
 
