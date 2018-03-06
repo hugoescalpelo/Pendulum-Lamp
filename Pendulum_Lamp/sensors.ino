@@ -1,6 +1,6 @@
 void readAll ()
 {
-  bData [0] = analogRead (A0);
+  bData [0] = analogRead (A0);//Read all sensors
   bData [1] = analogRead (A1);
   bData [2] = analogRead (A2);
   bData [3] = analogRead (A3);
@@ -8,12 +8,13 @@ void readAll ()
   bData [5] = analogRead (A5);
   bData [6] = analogRead (A6);
   bData [7] = analogRead (A7);
-  
-  for (int ir = 0; ir < NLASERS; ir++)
+
+  for (byte ir = 0; ir < NLASERS; ir++)//Buids the binary data variable to work with
   {
-    Serial.print (bData [ir]);
+    Serial.print (bData [ir]);//byte monitoring with threshold value purposes
     Serial.print (" ");
-    if (bData [ir] < threshold)
+    
+    if (bData [ir] < threshold)//The threshold value determines wich value has to be written
     {
       bitClear (aData, ir);
     }
@@ -21,8 +22,11 @@ void readAll ()
     {
       bitSet (aData, ir);
     }
+
+    addPromedier (ir, bData [ir]);
+    trimPromedier ();//Cuts detected value, max and min values from the promedier, then calculate the average value.
   }
   Serial.println ();
-  Serial.println (aData, BIN);
+  Serial.println (aData, BIN);//Binary monitoring
 }
 

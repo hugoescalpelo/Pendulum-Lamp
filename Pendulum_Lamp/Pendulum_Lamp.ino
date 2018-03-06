@@ -43,19 +43,23 @@
 Servo myServo;//A servo object to manage our servo
 
 //Constants
-const int NLASERS = 8;
+const byte NLASERS = 8;
+const byte LPRMDR = 16;
 
 //Variables
-int pinSensor [NLASERS];//Array that holds pinset
+byte pinSensor [NLASERS];//Array that holds pinset
 byte lData;//Last cicle data readed
 byte aData;//This cicle data readed
-int bData [NLASERS];//Buffer data
+byte bData [NLASERS];//Buffer data
 int pos_bin;//Binary position
 int pos_indx;//decimal position
 int last_pos_indx;
 int last_pos_bin;
 
-int threshold = 400;
+int threshold [NLASERS] = {};//Threshold value for detecting pendulum wire shadow
+byte th_range = 10;//Threshold range, because of the noise
+int sampling = 20;//Sampling time for sensor read
+byte prmdr [NLASERS][LPRMDR] = {};//Promedier memory workspace
 
 int angle_a = 40; //Ignition angle by right
 int max_a = 20;//Limits
@@ -97,17 +101,18 @@ void setup ()
   delay (2000);
   startEngine ();
   Serial.println ("Done");
+  //thresholdPromedierInitializer;
   timeNow = millis ();
 }
 
 void loop ()
 {
   readAll ();
-  aData = ~aData;//Not to all bits
+  aData = ~aData;//All bits inverted in order to detect the wire via lowByte
 
   if (lData != aData && aData != 0)
   {
-    last_pos_bin = pos_bin;
+    last_pos_bin = pos_bin;//Historic, needed to tell the direction of the wire
     last_pos_indx = pos_indx;
     pos_bin = lowByte (aData);
     pos_indx = getPosition (pos_bin);
