@@ -50,7 +50,7 @@ const byte LPRMDR = 16;
 byte pinSensor [NLASERS];//Array that holds pinset
 byte lData;//Last cicle data readed
 byte aData;//This cicle data readed
-byte bData [NLASERS];//Buffer data
+int bData [NLASERS];//Buffer data
 int pos_bin;//Binary position
 int pos_indx;//decimal position
 int last_pos_indx;
@@ -58,8 +58,9 @@ int last_pos_bin;
 
 int threshold [NLASERS] = {};//Threshold value for detecting pendulum wire shadow
 byte th_range = 10;//Threshold range, because of the noise
-int sampling = 20;//Sampling time for sensor read
-byte prmdr [NLASERS][LPRMDR] = {};//Promedier memory workspace
+byte sampling = 20;//Sampling time for sensor read
+int prmdr [NLASERS][LPRMDR] = {};//Promedier memory cache
+int avg [NLASERS][2] = {};//An arral NLASERS longitud for every sensor and for on/off values
 
 int angle_a = 40; //Ignition angle by right
 int max_a = 20;//Limits

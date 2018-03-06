@@ -30,11 +30,11 @@ void listenPort ()
 }
 
 //prmdr [NLASERS][LPRMDR]
-void addPromedier (byte i_data, byte pData)//i_data stands for index data laser, pData stands for promedier data
+void addPromedier (byte i_data, int pData)//i_data stands for index data laser, pData stands for promedier data
 {
-  for (int p_shift = 0; p_shift < LPRMDR - 1; p_shift++)//p_shift stands for promedier shift index
+  for (byte p_shift = 0; p_shift < LPRMDR - 1; p_shift++)//p_shift stands for promedier shift index
   {
-    byte bPromedier = prmdr [i_data][p_shift + 1];//bPromedier stands for buffer promedier
+    int bPromedier = prmdr [i_data][p_shift + 1];//bPromedier stands for buffer promedier
     prmdr [i_data][LPRMDR] = bPromedier;//Here and the before line pass the next data into the array
   }
   prmdr [NLASERS][pData] = pData;//Add the actual value this function was called for to the bottom of the array
@@ -42,14 +42,14 @@ void addPromedier (byte i_data, byte pData)//i_data stands for index data laser,
 
 void trimPromedier ()
 {
-  for (int t_nl = 0; t_nl < NLASERS; t_nl++)//t_nl stands for trimmer for the number of lasers index
+  for (byte t_nl = 0; t_nl < NLASERS; t_nl++)//t_nl stands for trimmer for the number of lasers index
   {
-    byte min_r = 255;//Registry variables and its index variables to select the max, min and threshold value
+    int minR = 1023;//Registry variables and its index variables to select the max, min and threshold value
     byte min_i = 0;
-    byte max_r = 0;
+    int maxR = 0;
     byte max_i = 0;
     byte th_i = 0;
-    for (int t_lp = 0; t_lp < LPRMDR; t_lp++)//t_lp stands for trimmer promedier longitude index
+    for (byte t_lp = 0; t_lp < LPRMDR; t_lp++)//t_lp stands for trimmer promedier longitude index
     {
       if (prmdr [t_nl][t_lp] < threshold [t_nl] + th_range && prmdr [t_nl][t_lp] > threshold [t_nl] -th_range)
       {
@@ -58,15 +58,24 @@ void trimPromedier ()
       }
       else if (prmdr [t_nl][t_lp] > max_r)
       {
-        max_r = prmdr [t_nl][t_lp];
+        maxR = prmdr [t_nl][t_lp];
         max_i = t_lp;
       }
       else if (prmdr [t_nl][t_lp] < min_r)
       {
-        min_r = prmdr [t_nl][t_lp];
+        minR = prmdr [t_nl][t_lp];
         min_i = t_lp;
       }
     }
+    int bAvg = 0;//Stands for buffer average auxiliar variable
+    for (byte avg_i = 0; avg_i < LPRMDR; avg_i++)//avg_i stands for average index variable
+    {
+      if (avg_i != th_i && avg_i != max_i && avg_i != min_i)
+      {
+        bAvg += prmdr [t_nl][avg_i];
+      }
+    }
+    avg [t_nl][0] = bAvg / (LPRMDR - 3);
   }
 }
 
