@@ -49,12 +49,13 @@ const int NLASERS = 8;
 int pinSensor [NLASERS];//Array that holds pinset
 byte lData;//Last cicle data readed
 byte aData;//This cicle data readed
+int bData [NLASERS];//Buffer data
 int pos_bin;//Binary position
 int pos_indx;//decimal position
 int last_pos_indx;
 int last_pos_bin;
 
-int threshold = 200;
+int threshold = 400;
 
 int angle_a = 40; //Ignition angle by right
 int max_a = 20;//Limits
@@ -86,23 +87,16 @@ void setup ()
 
   myServo.attach (3);//Begin servo at pin 3
 
-  aData [0] = analogRead (A0);
-  aData [1] = analogRead (A1);
-  aData [2] = analogRead (A2);
-  aData [3] = analogRead (A3);
-  aData [4] = analogRead (A4);
-  aData [5] = analogRead (A5);
-  aData [6] = analogRead (A6);
-  aData [7] = analogRead (A7);
-
   //First call. Test the lecture
   readAll ();
   //printAllSensors ();
 
   //Ignition sequence
+  Serial.println ("Ignition sequence");
   myServo.write (90);
   delay (2000);
   startEngine ();
+  Serial.println ("Done");
   timeNow = millis ();
 }
 
@@ -118,8 +112,8 @@ void loop ()
     pos_bin = lowByte (aData);
     pos_indx = getPosition (pos_bin);
 
-    //printBinaries ();
-    //printAllSensors ();
+    printBinaries ();
+    printAllSensors ();
 
     impulse (intensity);//Impulse in 'intensity' proportion assensor detects
   }
