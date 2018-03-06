@@ -11,10 +11,7 @@ void readAll ()
 
   for (byte ir = 0; ir < NLASERS; ir++)//Buids the binary data variable to work with
   {
-    Serial.print (bData [ir]);//byte monitoring with threshold value purposes
-    Serial.print (" ");
-    
-    if (bData [ir] < threshold)//The threshold value determines wich value has to be written
+   if (bData [ir] < threshold)//The threshold value determines wich value has to be written
     {
       bitClear (aData, ir);
     }
@@ -22,11 +19,6 @@ void readAll ()
     {
       bitSet (aData, ir);
     }
-
-    addPromedier (ir, bData [ir]);
-    trimPromedier ();//Cuts detected value, max and min values from the promedier, then calculate the average value.
   }
-  Serial.println ();
-  Serial.println (aData, BIN);//Binary monitoring
 }
 

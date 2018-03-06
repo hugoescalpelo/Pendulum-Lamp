@@ -61,6 +61,7 @@ byte th_range = 10;//Threshold range, because of the noise
 byte sampling = 20;//Sampling time for sensor read
 int prmdr [NLASERS][LPRMDR] = {};//Promedier memory cache
 int avg [NLASERS][2] = {};//An arral NLASERS longitud for every sensor and for on/off values
+int dPrmdr [NLASERS][LPRMDR] = {};//Detect memory cache
 
 int angle_a = 40; //Ignition angle by right
 int max_a = 20;//Limits
@@ -88,7 +89,7 @@ double timeLast, timeNow;//Time tracking variables
 void setup ()
 {
   Serial.begin (2000000);//Begin serial communication
-  Serial.println ("inicio");
+  Serial.println ("Inicio");
 
   myServo.attach (3);//Begin servo at pin 3
 
@@ -98,11 +99,11 @@ void setup ()
 
   //Ignition sequence
   Serial.println ("Ignition sequence");
-  myServo.write (90);
-  delay (2000);
-  startEngine ();
+  ignitionSequence (15);
   Serial.println ("Done");
+  
   //thresholdPromedierInitializer;
+  
   timeNow = millis ();
 }
 
@@ -114,14 +115,16 @@ void loop ()
   if (lData != aData && aData != 0)
   {
     last_pos_bin = pos_bin;//Historic, needed to tell the direction of the wire
-    last_pos_indx = pos_indx;
-    pos_bin = lowByte (aData);
-    pos_indx = getPosition (pos_bin);
+    last_pos_indx = pos_indx;//We need to save this before get a new position and index
+    pos_bin = lowByte (aData);//Returns the lowest set byte
+    pos_indx = getPosition (pos_bin);//I worte this funny switch-case function to return the decimal position of pos_bin. I know there are fancier ways to do this, but couldnt find'em quick
+
+    impulse (intensity);//Impulse in 'intensity' proportion as sensor detects. This moves the servo
+    //addPromedier (ir, bData [ir]);
+    trimAndAvg ();//Cuts detected value, max and min values from the promedier, then calculate the average value.
 
     printBinaries ();
     printAllSensors ();
-
-    impulse (intensity);//Impulse in 'intensity' proportion assensor detects
   }
 
   //Here it can be added an asynchronous sequence to update de angle of the servos
@@ -138,6 +141,5 @@ void loop ()
   lData = aData;//Sets a trace of readings
 
   listenPort ();
-  //delay (100);
 }
 

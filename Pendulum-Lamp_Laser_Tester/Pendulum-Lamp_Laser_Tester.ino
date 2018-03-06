@@ -8,7 +8,11 @@ void setup()
 {
   Serial.begin (2000000);//Begin serial communication
   Serial.println ("inicio");
-  
+}
+
+void loop ()
+{
+  lData = dData;
   aData [0] = analogRead (A0);
   aData [1] = analogRead (A1);
   aData [2] = analogRead (A2);
@@ -17,11 +21,6 @@ void setup()
   aData [5] = analogRead (A5);
   aData [6] = analogRead (A6);
   aData [7] = analogRead (A7);
-}
-
-void loop ()
-{
-  lData = dData;
 
   for (int ir = 0; ir < c; ir ++)
   {

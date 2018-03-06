@@ -1,7 +1,9 @@
-void startEngine ()
+void ignitionSequence (byte igntnStps)
 {
+  myServo.write (90);
+  delay (2000);
   refreshRichter (intensity);
-  for (int i = 0; i < 15; i++)
+  for (int i = 0; i < igntnStps; i++)
   {
     if (polar == 0)
     {
