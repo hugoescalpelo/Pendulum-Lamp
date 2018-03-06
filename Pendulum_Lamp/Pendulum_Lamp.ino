@@ -1,7 +1,7 @@
 /*
    Iván Abreu Studio.
 
-   23/2/2018
+   6/3/2018
 
    The point of this program is to keep a pendulum lamp moving.
 
@@ -11,8 +11,8 @@
    The max aplitud has to be sustanied.
 
    Other goals of future versions:
-    -Manual control of earthquake intensity
     -Feed of historic earthquakes behaviour
+    -Contextual auto threshold sequence
 
    ChangeLog
    V1. Micro servo
@@ -25,6 +25,8 @@
    V4.4. Succesful auto sync
    v4.4.1 Added proportional servo movement
    V4.4.2 Fix to takeMeOut sequence
+   V4.4.3 Manual control of earthcuake intensity
+   V4.5 Laser sensor array
 
    Team:
 
@@ -40,14 +42,19 @@
 //Objects
 Servo myServo;//A servo object to manage our servo
 
+//Constants
+const int NLASERS = 8;
+
 //Variables
-int pinSensor [8];//Array that holds pinset
+int pinSensor [NLASERS];//Array that holds pinset
 byte lData;//Last cicle data readed
 byte aData;//This cicle data readed
 int pos_bin;//Binary position
 int pos_indx;//decimal position
 int last_pos_indx;
 int last_pos_bin;
+
+int threshold = 200;
 
 int angle_a = 40; //Ignition angle by right
 int max_a = 20;//Limits
@@ -79,11 +86,14 @@ void setup ()
 
   myServo.attach (3);//Begin servo at pin 3
 
-  for (int i = 0; i < 8; i++)//fancy way to set all pins as INPUT
-  {
-    pinSensor [i] = i + 4;
-    pinMode (pinSensor [i], INPUT);
-  }
+  aData [0] = analogRead (A0);
+  aData [1] = analogRead (A1);
+  aData [2] = analogRead (A2);
+  aData [3] = analogRead (A3);
+  aData [4] = analogRead (A4);
+  aData [5] = analogRead (A5);
+  aData [6] = analogRead (A6);
+  aData [7] = analogRead (A7);
 
   //First call. Test the lecture
   readAll ();
@@ -98,7 +108,6 @@ void setup ()
 
 void loop ()
 {
-
   readAll ();
   aData = ~aData;//Not to all bits
 
