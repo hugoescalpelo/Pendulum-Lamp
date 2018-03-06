@@ -53,10 +53,10 @@ void trimPromedier ()
     {
       if (prmdr [t_nl][t_lp] < threshold [t_nl] + th_range && prmdr [t_nl][t_lp] > threshold [t_nl] -th_range)
       {
-        //addDetectPromedier (
+        //addDetectPromedier (t_nl, prmdr [t_nl][t_lp]);
         th_i = t_lp;
       }
-      if (prmdr [t_nl][t_lp] > max_r)
+      else if (prmdr [t_nl][t_lp] > max_r)
       {
         max_r = prmdr [t_nl][t_lp];
         max_i = t_lp;
