@@ -65,3 +65,8 @@ void takeMeOut ()
   }
 }
 
+void servoRender ()
+{
+  //
+}
+

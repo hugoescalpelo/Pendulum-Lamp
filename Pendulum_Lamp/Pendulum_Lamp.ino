@@ -45,6 +45,7 @@ Servo myServo;//A servo object to manage our servo
 //Constants
 const byte NLASERS = 8;
 const byte LPRMDR = 16;
+const byte NIMPULSES = 5;
 
 //Variables
 byte pinSensor [NLASERS];//Array that holds pinset
@@ -99,7 +100,7 @@ void setup ()
 
   //Ignition sequence
   Serial.println ("Ignition sequence");
-  ignitionSequence (15);
+  ignitionSequence (NIMPULSES);//The parameter sets the number of impuses
   Serial.println ("Done");
   
   //thresholdPromedierInitializer;
@@ -112,7 +113,7 @@ void loop ()
   readAll ();
   aData = ~aData;//All bits inverted in order to detect the wire via lowByte
 
-  if (lData != aData && aData != 0)
+  if (lData != aData && aData != 0)//Whenever a change is detected and that changes isn't the inbetween position of the wire
   {
     last_pos_bin = pos_bin;//Historic, needed to tell the direction of the wire
     last_pos_indx = pos_indx;//We need to save this before get a new position and index
@@ -120,12 +121,16 @@ void loop ()
     pos_indx = getPosition (pos_bin);//I worte this funny switch-case function to return the decimal position of pos_bin. I know there are fancier ways to do this, but couldnt find'em quick
 
     impulse (intensity);//Impulse in 'intensity' proportion as sensor detects. This moves the servo
+    //This is the working soul of the code. Below is the code that gives stability to the readings and the one that I want to run only when detecting changes
+    
     //addPromedier (ir, bData [ir]);
     trimAndAvg ();//Cuts detected value, max and min values from the promedier, then calculate the average value.
 
     printBinaries ();
     printAllSensors ();
   }
+
+  servoRender ();
 
   //Here it can be added an asynchronous sequence to update de angle of the servos
   //as function of intensity.
