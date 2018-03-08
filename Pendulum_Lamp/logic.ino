@@ -44,30 +44,30 @@ void trimAndAvg ()
 {
   for (byte t_nl = 0; t_nl < NLASERS; t_nl++)//t_nl stands for trimmer for the number of lasers index
   {
-    int minR = 1023;//Registry variables and its index variables to select the max, min and threshold value
-    byte min_i = 0;
-    int maxR = 0;
-    byte max_i = 0;
-    byte th_i = 0;
-    for (byte t_lp = 0; t_lp < LPRMDR; t_lp++)//t_lp stands for trimmer promedier longitude index
-    {
-      if (prmdr [t_nl][t_lp] < threshold [t_nl] + th_range && prmdr [t_nl][t_lp] > threshold [t_nl] -th_range)
-      {
-        addDetectPromedier (t_nl, prmdr [t_nl][t_lp]);
-        detectTrimAndAvg ();
-        th_i = t_lp;
-      }
-      else if (prmdr [t_nl][t_lp] > max_r)
-      {
-        maxR = prmdr [t_nl][t_lp];
-        max_i = t_lp;
-      }
-      else if (prmdr [t_nl][t_lp] < min_r)
-      {
-        minR = prmdr [t_nl][t_lp];
-        min_i = t_lp;
-      }
-    }
+//    int minR = 1023;//Registry variables and its index variables to select the max, min and threshold value
+//    byte min_i = 0;
+//    int maxR = 0;
+//    byte max_i = 0;
+//    byte th_i = 0;
+//    for (byte t_lp = 0; t_lp < LPRMDR; t_lp++)//t_lp stands for trimmer promedier longitude index
+//    {
+//      if (prmdr [t_nl][t_lp] < threshold [t_nl] + th_range && prmdr [t_nl][t_lp] > threshold [t_nl] -th_range)
+//      {
+//        addDetectPromedier (t_nl, prmdr [t_nl][t_lp]);
+//        detectTrimAndAvg ();
+//        th_i = t_lp;
+//      }
+//      else if (prmdr [t_nl][t_lp] > max_r)
+//      {
+//        maxR = prmdr [t_nl][t_lp];
+//        max_i = t_lp;
+//      }
+//      else if (prmdr [t_nl][t_lp] < min_r)
+//      {
+//        minR = prmdr [t_nl][t_lp];
+//        min_i = t_lp;
+//      }
+//    }
     int bAvg = 0;//Stands for buffer average auxiliar variable
     for (byte avg_i = 0; avg_i < LPRMDR; avg_i++)//avg_i stands for average index variable
     {

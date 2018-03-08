@@ -1,12 +1,18 @@
 void ignition (byte kignitionValue, float richterDegreesValue)
 {
   servoCenter ();
+  protoThresholdFiller ();
 
   bool kicks = 0;
   while (kicks == 0)
   {
     readAll ();//Read all sensors
-    promedier ();//Calculate average on/off levels
+    protoChange ();//calls a function that rudimentarily checks changes in motion
+    if (aData != lData)
+    {
+      promedier ();//Calculate average on/off levels
+    }
+    
     movementDescriptor (richterDegreesValue, IGND);
     motorRender ();
   }
@@ -54,19 +60,19 @@ void avgPromedier ()
       //Search for max, min and on values
       if (promedierArray [i_vp][i_lv] < threshold [i_vp] + thRange && promedierArray [i_vp][i_lv] > threshold [i_vp] - thRange)//If in range
       {
-        addThresholdAux (i_lv, promedierArray [i_vp][i_lv]);
-        avgThresholdAux ();
         i_th = i_lv;
+        addThresholdAux (i_lv, promedierArray [i_vp][i_th]);
+        avgThresholdAux ();
       }
       else if (promedierArray [i_vp][i_lv] > maxR)
       {
-        maxR = promedierArray [i_vp][i_lv];
         i_max = i_lv;
+        maxR = promedierArray [i_vp][i_max];
       }
       else if (promedierArray [i_vp][i_lv] < minR)
       {
-        minR = promedierArray [i_vp][i_lv];
         i_min = i_lv;
+        minR = promedierArray [i_vp][i_min];
       }
     }
     int bAvg = 0;
@@ -74,7 +80,7 @@ void avgPromedier ()
     {
       if (i_dv != i_th && i_dv != i_max && i_dv != i_min)
       {
-        bAvg += promedierArray [i_vp][i_lv];
+        bAvg += promedierArray [i_vp][i_dv];
       }
     }
     avg [i_vp][0] = bAvg / (LPROMEDIER - 3);
@@ -104,13 +110,13 @@ void avgThresholdAux ()
     {
       if (thresholdArray [i_at][i_ar] > maxR)
       {
-        maxR = thresholdArray [i_at][i_ar];
-        i_max = i_lv;
+        i_max = i_ar;
+        maxR = thresholdArray [i_at][i_max];
       }
       else if (thresholdArray [i_at][i_ar] < minR)
       {
-        minR = thresholdArray [i_at][i_ar];
-        i_min = i_lv;
+        i_min = i_ar;
+        minR = thresholdArray [i_at][i_min];
       }
     }
     int bThr = 0;//Stands for buffer threshold
@@ -121,7 +127,7 @@ void avgThresholdAux ()
         bThr += thresholdArray [i_at][i_dv];
       }
     }
-    avg [i_vp][1] = bThr / (LPROMEDIER - 2);
+    avg [i_at][1] = bThr / (LPROMEDIER - 2);
   }
 }
 

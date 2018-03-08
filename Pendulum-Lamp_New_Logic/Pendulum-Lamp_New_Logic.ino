@@ -47,15 +47,18 @@ Servo pendulum;//Represents the pendulum servo
 const byte NLASERS = 8;//Number of laser sensors
 const byte KICKNITION = 15;//Number of ignition kicks
 const byte SERVOCENTER = 90;//Centered servo position in degrees
-const bool IGND = 0;
-const bool WRKD = 1;
+const bool IGND = 0;//Ignition drive for movement descriptor function
+const bool WRKD = 1;//Working drive for movement descriptor function
 const byte LPROMEDIER = 16;
 
 //Variables
 int bData [NLASERS] = {};
 byte aData;
+byte lData;
 
+int protoThreshold [NLASERS] = {};
 int threshold [NLASERS] = {};
+int protoTh = 400;
 int promedierArray [NLASERS][LPROMEDIER] = {};
 byte thRange = 10;
 int thresholdArray [NLASERS][LPROMEDIER] = {};
