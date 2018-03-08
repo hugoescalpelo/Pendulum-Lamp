@@ -30,15 +30,15 @@ void listenPort ()
 }
 
 //prmdr [NLASERS][LPRMDR]
-void addPromedier (byte i_data, int pData)//i_data stands for index data laser, pData stands for promedier data
-{
-  for (byte p_shift = 0; p_shift < LPRMDR - 1; p_shift++)//p_shift stands for promedier shift index
-  {
-    int bPromedier = prmdr [i_data][p_shift + 1];//bPromedier stands for buffer promedier
-    prmdr [i_data][LPRMDR] = bPromedier;//Here and the before line pass the next data into the array
-  }
-  prmdr [i_data][LPRMDR - 1] = pData;//Add the actual value this function was called for to the bottom of the array
-}
+//void addPromedier (byte i_data, int pData)//i_data stands for index data laser, pData stands for promedier data
+//{
+//  for (byte p_shift = 0; p_shift < LPRMDR - 1; p_shift++)//p_shift stands for promedier shift index
+//  {
+//    int bPromedier = prmdr [i_data][p_shift + 1];//bPromedier stands for buffer promedier
+//    prmdr [i_data][LPRMDR] = bPromedier;//Here and the before line pass the next data into the array
+//  }
+//  prmdr [i_data][LPRMDR - 1] = pData;//Add the actual value this function was called for to the bottom of the array
+//}
 
 void trimAndAvg ()
 {

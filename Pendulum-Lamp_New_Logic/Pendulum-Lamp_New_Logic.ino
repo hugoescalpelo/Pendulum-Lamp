@@ -57,6 +57,9 @@ byte aData;
 
 int threshold [NLASERS] = {};
 int promedierArray [NLASERS][LPROMEDIER] = {};
+byte thRange = 10;
+int thresholdArray [NLASERS][LPROMEDIER] = {};
+int avg [NLASERS][2] = {};//0 off, 1 on
 
 float richterDegrees = 7.5;
 
