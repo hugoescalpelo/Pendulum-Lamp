@@ -22,6 +22,8 @@ void protoThresholdFiller ()
 
 void protoChange ()
 {
+  nData = mData;
+  mData = lData;
   lData = aData;
   for (byte i_ra = 0; i_ra < NLASERS; i_ra++)//Buids the binary data variable to work with
   {

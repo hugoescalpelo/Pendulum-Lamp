@@ -61,6 +61,8 @@ const int MAXTRAVELTIME = 1200;
 int bData [NLASERS] = {};
 byte aData;
 byte lData;
+byte mData;
+byte nData;
 
 int protoThreshold [NLASERS] = {};
 int threshold [NLASERS] = {};

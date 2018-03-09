@@ -3,8 +3,8 @@ void ignition (byte kignitionValue, float richterDegreesValue)
   servoCenter ();
   protoThresholdFiller ();
 
-  bool kicks = 0;
-  while (kicks == 0)
+  byte kicks = 0;
+  while (kicks >= kignitionValue)
   {
     readAll ();//Read all sensors
     protoChange ();//calls a function that rudimentarily checks changes in motion
@@ -15,6 +15,7 @@ void ignition (byte kignitionValue, float richterDegreesValue)
     
     movementDescriptor (richterDegreesValue, IGND);
     motorRender ();
+    kicks++;
   }
 }
 
@@ -175,29 +176,48 @@ void motoRender ()
     dinamicPosition = map (targetTime - timeNow, 0, travelTime, extensionF, extensionB);
     pendulum.write (dinamicPosition);
   }
-  else if (timeNow > targetTime && servoDirection == 1 && reached == 0)
+  else if (timeNow > targetTime && servoDirection == 1)
   {
     pendulum.write (extensionF);
-    reached = 1;
   }
   else if (timeNow < targetTime && servoDirection == 0)
   {
     dinamicPosition = map (targetTime - timeNow, 0, travelTime, extensionB, extensionF);
     pendulum.write (dinamicPosition);
   }
-  else if (timeNow > targetTime && servoDirection == 0 && reached == 0)
+  else if (timeNow > targetTime && servoDirection == 0)
   {
     pendulum.write (extensionF);
-    reached = 1;
   }
     
-  if (directionChanged == 1 && reached == 1)
+  if (directionChanged == 1 && reached == 0)
   {
-    reached = 0;
     directionChanged = 0;
   }
+
+  bool lc = lampChangeDirection ();
+  if (directionChanged == 0 && lc == 1)
+  {
+    reached = 1;
+  }
+  
 }
 
+bool lampChangeDirection ()
+{
+  if (aData == mData && lData == 255)
+  {
+    return (1);
+  }
+  else if (lData == nData && mData == 255)
+  {
+    return (1);
+  }
+  else
+  {
+    return (0);
+  }
+}
 void motorWatchdog ()
 {
   //
