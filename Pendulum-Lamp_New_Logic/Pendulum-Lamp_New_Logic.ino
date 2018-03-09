@@ -50,6 +50,12 @@ const byte SERVOCENTER = 90;//Centered servo position in degrees
 const bool IGND = 0;//Ignition drive for movement descriptor function
 const bool WRKD = 1;//Working drive for movement descriptor function
 const byte LPROMEDIER = 16;
+const byte MINRICHTER = 5.0;
+const byte MAXRICHTER = 8.5;
+const byte MINEXTENSION = 20;
+const byte MAXEXTENSION = 70;
+const int MINTRAVELTIME = 300;
+const int MAXTRAVELTIME = 1200;
 
 //Variables
 int bData [NLASERS] = {};
@@ -65,6 +71,19 @@ int thresholdArray [NLASERS][LPROMEDIER] = {};
 int avg [NLASERS][2] = {};//0 off, 1 on
 
 float richterDegrees = 7.5;
+byte extensionF, extensionB;
+byte movementLength;
+bool servoDirection = 0;
+byte dinamicPosition;
+bool wFlag = 0;
+
+double timeLast, timeNow;
+int travelTime;
+double targetTime;
+double trackWaiter;
+int waiter;
+
+bool reached = 1;//Tells if servo has reached its target position. Initializes at 1 in order to be able to run ignition sequence
 
 void setup() 
 {
@@ -72,12 +91,13 @@ void setup()
   Serial.println ("Inicio");
 
   ignition (KICKNITION, richterDegrees);//Generates an initial suitable movement and set on/off values
+
+  timeLast = millis ();
 }
 
 void loop() 
 {
   readAll ();//Read all sensors
-  directionDetector ();//Gets direction and time between direction change
   movementDescriptor (richterDegrees, WRKD);//Determine movement type
   motorRender ();//Writes an asynchronous continuum soft transition or fast jump to de servo
   motorWatchdog ();//Prevents pendulum movement from breaking at low richterDegrees
