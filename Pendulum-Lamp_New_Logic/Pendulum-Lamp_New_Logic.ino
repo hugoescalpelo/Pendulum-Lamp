@@ -76,12 +76,12 @@ byte movementLength;
 bool servoDirection = 0;
 byte dinamicPosition;
 bool wFlag = 0;
+bool lServoDirection = 0;
+bool directionChanged = 0;
 
-double timeLast, timeNow;
+double timeLast, timeNow, targetTime;
 int travelTime;
-double targetTime;
-double trackWaiter;
-int waiter;
+
 
 bool reached = 1;//Tells if servo has reached its target position. Initializes at 1 in order to be able to run ignition sequence
 

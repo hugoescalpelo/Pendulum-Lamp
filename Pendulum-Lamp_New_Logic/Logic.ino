@@ -139,52 +139,62 @@ void movementDescriptor (float richterValue, bool movementSet)
   }
   else if (reached == 1 && movementSet == IGND)
   {
-    //
     extensionF = SERVOCENTER + map (richterValue, MINRICHTER, MAXRICHTER, MINEXTENSION, MAXEXTENSION);//Extension front
     extensionB = SERVOCENTER - map (richterValue, MINRICHTER, MAXRICHTER, MINEXTENSION, MAXEXTENSION);//Extension back
     travelTime = map (richterValue, MINRICHTER, MAXRICHTER, MAXTRAVELTIME, MINTRAVELTIME);
     movementLength = extensionF - extensionB;
     toogleDirection ();
     reached = 0;
-    //wFlag = 0;
+    wFlag = 0;
     targetTime = millis () + travelTime;
   }
 }
 
 void toogleDirection ()
 {
-  //
+  lServoDirection = servoDirection;
+  if (servoDirection == 1)
+  {
+    servoDirection = 0;
+  }
+  else
+  {
+    servoDirection = 1;
+  }
+  if (lServoDirection != servoDirection)
+  {
+    directionChanged = 1;
+  }
 }
 
 void motoRender ()
 {
-  //
   timeNow = millis ();
   if (timeNow < targetTime && servoDirection == 1)
   {
     dinamicPosition = map (targetTime - timeNow, 0, travelTime, extensionF, extensionB);
     pendulum.write (dinamicPosition);
   }
-  else if (timeNow > targetTime && servoDirection == 1 && wFlag == 0)
+  else if (timeNow > targetTime && servoDirection == 1 && reached == 0)
   {
-    trackWaiter = millis () + waiter;
-    wFlag = 1;
+    pendulum.write (extensionF);
+    reached = 1;
   }
-  
-  if (timeNow < targetTime && servoDirection == 0)
+  else if (timeNow < targetTime && servoDirection == 0)
   {
     dinamicPosition = map (targetTime - timeNow, 0, travelTime, extensionB, extensionF);
     pendulum.write (dinamicPosition);
   }
-  else if (timeNow > targetTime && servoDirection == 0 && wFlag == 0)
+  else if (timeNow > targetTime && servoDirection == 0 && reached == 0)
   {
-    trackWaiter = millis () + waiter;
-    wFlag = 1;
-  }
-  
-  if (timeNow > trackWaiter && wFlag == 1)
-  {
+    pendulum.write (extensionF);
     reached = 1;
+  }
+    
+  if (directionChanged == 1 && reached == 1)
+  {
+    reached = 0;
+    directionChanged = 0;
   }
 }
 
