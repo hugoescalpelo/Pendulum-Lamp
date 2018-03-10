@@ -1,21 +1,31 @@
 void ignition (byte kignitionValue, float richterDegreesValue)
 {
+  //Serial.println ("Ignition Started");
+  pendulum.write (45);
+  delay (1000);
   servoCenter ();
+  delay (2000);
+  //Serial.println ("Servo forced");
+  
   protoThresholdFiller ();
+  //printProtoThresholdFiller ();
 
-  byte kicks = 0;
-  while (kicks >= kignitionValue)
+  kicks = 0;
+  while (kicks < kignitionValue)
   {
+    //printKickCounter ();
     readAll ();//Read all sensors
+    //printReadAll ();
     protoChange ();//calls a function that rudimentarily checks changes in motion
+    //printProtoChange();
     if (aData != lData)
     {
+      printProtoChange();
       promedier ();//Calculate average on/off levels
     }
     
     movementDescriptor (richterDegreesValue, IGND);
-    motorRender ();
-    kicks++;
+    motorRender ();   
   }
 }
 
@@ -138,16 +148,19 @@ void movementDescriptor (float richterValue, bool movementSet)
   {
     //
   }
-  else if (reached == 1 && movementSet == IGND)
+  else if (r1 == 1 && movementSet == IGND)
   {
+    //Serial.println ("Movement Descriptor ignition ");
     extensionF = SERVOCENTER + map (richterValue, MINRICHTER, MAXRICHTER, MINEXTENSION, MAXEXTENSION);//Extension front
     extensionB = SERVOCENTER - map (richterValue, MINRICHTER, MAXRICHTER, MINEXTENSION, MAXEXTENSION);//Extension back
     travelTime = map (richterValue, MINRICHTER, MAXRICHTER, MAXTRAVELTIME, MINTRAVELTIME);
     movementLength = extensionF - extensionB;
     toogleDirection ();
     reached = 0;
+    r1 = 0;
     wFlag = 0;
     targetTime = millis () + travelTime;
+    printMovementDescriptor ();
   }
 }
 
@@ -168,49 +181,67 @@ void toogleDirection ()
   }
 }
 
-void motoRender ()
+void motorRender ()
 {
   timeNow = millis ();
-  if (timeNow < targetTime && servoDirection == 1)
+//  Serial.print ("tN ");
+//  Serial.print (timeNow);
+//  Serial.print (" sD ");
+//  Serial.println (servoDirection);
+  if (timeNow < targetTime && servoDirection == 1 && r1 == 0)
   {
+    //Serial.println ("Movin servo direction 1");
     dinamicPosition = map (targetTime - timeNow, 0, travelTime, extensionF, extensionB);
     pendulum.write (dinamicPosition);
   }
-  else if (timeNow > targetTime && servoDirection == 1)
+  else if (timeNow > targetTime && servoDirection == 1 && r1 == 0)
   {
     pendulum.write (extensionF);
+    r1 = 1;
+    Serial.println ("dP reached 1");
   }
-  else if (timeNow < targetTime && servoDirection == 0)
+  else if (timeNow < targetTime && servoDirection == 0 && r1 == 0)
   {
+    //Serial.println ("Movin servo direction 0");
     dinamicPosition = map (targetTime - timeNow, 0, travelTime, extensionB, extensionF);
     pendulum.write (dinamicPosition);
   }
-  else if (timeNow > targetTime && servoDirection == 0)
+  else if (timeNow > targetTime && servoDirection == 0 && r1 == 0)
   {
     pendulum.write (extensionF);
+    r1 = 1;
+    Serial.println ("dP reached 0");
   }
     
   if (directionChanged == 1 && reached == 0)
   {
     directionChanged = 0;
+    Serial.println ("dC");
   }
 
-  bool lc = lampChangeDirection ();
+  lc = lampChangeDirection ();
   if (directionChanged == 0 && lc == 1)
   {
-    reached = 1;
+    //reached = 1;
+    lc = 0;
+    //kicks++;
+    //Serial.print ("kicks ");
+    //Serial.println (kicks);
   }
   
 }
 
 bool lampChangeDirection ()
 {
+  
   if (aData == mData && lData == 255)
   {
+    //Serial.println ("dc1");
     return (1);
   }
   else if (lData == nData && mData == 255)
   {
+    //Serial.println ("dc2");
     return (1);
   }
   else

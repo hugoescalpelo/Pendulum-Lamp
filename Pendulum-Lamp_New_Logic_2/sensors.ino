@@ -10,22 +10,12 @@ void readAll ()
   bData [7] = analogRead (A7);    
 }
 
-void protoThresholdFiller ()
-{
-  for (byte i_pf = 0; i_pf < NLASERS; i_pf++)//i_pf stands for proto threshold filler index variable
-  {
-    protoThreshold [i_pf] = protoTh;
-  }
-}
-
 void protoChange ()
 {
-  nData = mData;
-  mData = lData;
   lData = aData;
-  for (byte i_ra = 0; i_ra < NLASERS; i_ra++)//Buids the binary data variable to work with
+  for (byte i_ra = 0; i_ra < NSENSORS; i_ra++)//Buids the binary data variable to work with
   {
-   if (bData [i_ra] < protoThreshold [i_ra])//The threshold value determines wich value has to be written
+   if (bData [i_ra] < PROTOTH)//The threshold value determines wich value has to be written
     {
       bitClear (aData, i_ra);
     }

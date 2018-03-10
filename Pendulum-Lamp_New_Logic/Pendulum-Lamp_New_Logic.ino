@@ -54,8 +54,9 @@ const byte MINRICHTER = 5.0;
 const byte MAXRICHTER = 8.5;
 const byte MINEXTENSION = 20;
 const byte MAXEXTENSION = 70;
-const int MINTRAVELTIME = 300;
-const int MAXTRAVELTIME = 1200;
+const int MINTRAVELTIME = 700;
+const int MAXTRAVELTIME = 1500;
+const int protoTh = 300;
 
 //Variables
 int bData [NLASERS] = {};
@@ -66,13 +67,14 @@ byte nData;
 
 int protoThreshold [NLASERS] = {};
 int threshold [NLASERS] = {};
-int protoTh = 400;
+
 int promedierArray [NLASERS][LPROMEDIER] = {};
 byte thRange = 10;
 int thresholdArray [NLASERS][LPROMEDIER] = {};
 int avg [NLASERS][2] = {};//0 off, 1 on
 
-float richterDegrees = 7.5;
+byte kicks = 0;
+float richterDegrees = 8.5;
 byte extensionF, extensionB;
 byte movementLength;
 bool servoDirection = 0;
@@ -86,11 +88,15 @@ int travelTime;
 
 
 bool reached = 1;//Tells if servo has reached its target position. Initializes at 1 in order to be able to run ignition sequence
+bool lc = 0;
+bool r1 = 0;
 
 void setup() 
 {
-  Serial.begin (20000000);
+  Serial.begin (2000000);
   Serial.println ("Inicio");
+
+  pendulum.attach (3);
 
   ignition (KICKNITION, richterDegrees);//Generates an initial suitable movement and set on/off values
 
