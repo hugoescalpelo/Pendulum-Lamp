@@ -15,7 +15,7 @@ const byte MAXBACK = CENTERPOSITION - MAXD;
 const int MINTRAVELTIME = 750;
 const int MAXTRAVELTIME = 1500;
 const byte NSENSORS = 8;
-int PROTOTH = 300;
+int PROTOTH = 650;
 
 byte richter = 8.4;
 byte positionB, positionF;
