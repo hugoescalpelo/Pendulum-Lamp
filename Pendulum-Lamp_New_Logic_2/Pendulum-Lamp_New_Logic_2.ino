@@ -15,7 +15,8 @@ const byte MAXBACK = CENTERPOSITION - MAXD;
 const int MINTRAVELTIME = 750;
 const int MAXTRAVELTIME = 1500;
 const byte NSENSORS = 8;
-int PROTOTH = 650;
+const int PROTOTH = 700;
+const byte LENGHTC1 = 16;
 
 byte richter = 8.4;
 byte positionB, positionF;
@@ -32,6 +33,8 @@ int travelTime;
 
 double timeNow;
 long targetTime;
+
+int c1 [NSENSORS][LENGHTC1] = {};
 
 void setup() 
 {

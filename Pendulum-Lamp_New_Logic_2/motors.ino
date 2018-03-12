@@ -3,7 +3,7 @@ void ignition ()
   pendulum.write (45);
   delay (1000);
   pendulum.write (CENTERPOSITION);
-  delay (2000);
+  delay (1000);
   adjustRichter (richter);
   
   timeNow = millis ();
@@ -14,6 +14,7 @@ void ignition ()
   {
     //printIgnitionMotorMonitor ();
     readAll ();
+    add ();
     //printValues();
     protoChange ();
     if (lData != aData && aData != 255)
@@ -44,9 +45,3 @@ void motorDrive ()
     pendulum.write (targetPosition);
   }
 }
-
-void takeMeOut ()
-{
-  //
-}
-
