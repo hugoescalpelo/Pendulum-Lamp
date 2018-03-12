@@ -71,3 +71,39 @@ void printValues ()
   Serial.println ();
 }
 
+void printC1C2 ()
+{
+  Serial.println("Readings");
+  for (int i_r = 0; i_r < LENGHTC1; i_r++)
+  {
+    for (int i_c = 0; i_c < NSENSORS; i_c++)
+    {
+      Serial.print (c1 [i_c][i_r]);
+      Serial.print (" ");
+    }
+    Serial.println ();
+  }
+  Serial.println ("Detect");
+  for (int i_r = 0; i_r < LENGHTC1; i_r++)
+  {
+    for (int i_c = 0; i_c < NSENSORS; i_c++)
+    {
+      Serial.print (c2 [i_c][i_r]);
+      Serial.print (" ");
+    }
+    Serial.println ();
+  }
+  Serial.println ();
+}
+
+void printDinamicThreshold ()
+{
+  Serial.println ("Dinamic Threshold");
+  for (byte i_c = 0; i_c < NSENSORS; i_c++)
+  {
+    Serial.print (dinamicThreshold [i_c]);
+    Serial.print (" ");
+  }
+  Serial.println ();
+}
+

@@ -2,7 +2,7 @@
 
 Servo pendulum;
 
-const byte IGND = 15;
+const byte IGND = 25;
 const byte CENTERPOSITION = 90;
 const byte MAXD = 80;
 const byte MIND = 10;
@@ -15,7 +15,7 @@ const byte MAXBACK = CENTERPOSITION - MAXD;
 const int MINTRAVELTIME = 750;
 const int MAXTRAVELTIME = 1500;
 const byte NSENSORS = 8;
-const int PROTOTH = 700;
+const int PROTOTH = 550;
 const byte LENGHTC1 = 16;
 
 byte richter = 8.4;
@@ -25,6 +25,7 @@ byte targetPosition;
 byte kicks = 0;
 int mData;
 bool lLampDirection, changeDirection;
+byte diferentialThreshold = 50;
 
 int bData [NSENSORS] = {};
 byte aData, lData;
@@ -35,6 +36,9 @@ double timeNow;
 long targetTime;
 
 int c1 [NSENSORS][LENGHTC1] = {};
+byte i_min_x [NSENSORS] = {};
+int c2 [NSENSORS][LENGHTC1] = {};
+int dinamicThreshold [NSENSORS]= {};
 
 void setup() 
 {

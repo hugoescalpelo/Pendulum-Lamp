@@ -9,7 +9,7 @@ void adjustRichter (float rch)
 
 void getTargetTime ()
 {
-  int rr= richter * 10;
+  int rr = richter * 10;
   travelTime = map (rr, MINRICHTER, MAXRICHTER, MAXTRAVELTIME, MINTRAVELTIME);
   targetTime = millis () + travelTime;
 }
@@ -38,6 +38,7 @@ void checkChangeDirection ()
   {
     changeDirection = 1;
     //printDirection ();
+    printC1C2 ();
   }
   lLampDirection = lampDirection;
 }
@@ -57,7 +58,7 @@ void toogleTargetPosition ()
 
 void add ()
 {
-  for (byte i_r = 0; i_r < LENGHTC1; i_r++)
+  for (byte i_r = 0; i_r < LENGHTC1 - 1; i_r++)
   {
     int shiftAux [NSENSORS] = {};
     for (byte i_c = 0; i_c < NSENSORS; i_c++)
@@ -75,6 +76,54 @@ void add ()
   }
 }
 
+void extractDetect ()
+{
+  for (byte i_c = 0; i_c < NSENSORS; i_c++)
+  {
+    int minR = 1023;
+    byte i_min = 0;
+    int maxR = 0;
+    byte i_max = 0;
+    for (byte i_r = 0; i_r < LENGHTC1; i_r++)
+    {
+      if (c1 [i_c][i_r] < minR)
+      {
+        minR = c1 [i_c][i_r];
+        i_min = i_r;
+      }
+      if (c1 [i_c][i_r] > maxR)
+      {
+        maxR = c1 [i_c][i_r];
+        i_max = i_r;
+      }
+    }
+    if (maxR != 0 || minR != 1023)
+    {
+      int bd = (maxR - minR) / 2;
+      if (bd > diferentialThreshold)
+      {
+        dinamicThreshold [i_c] = bd;
+      }
+
+
+      if (c1 [i_c][LENGHTC1 - 1] < maxR - dinamicThreshold [i_c])
+      {
+        addDetect (i_c, c1 [i_c][LENGHTC1 - 1]);
+      }
+    }
+  }
+  printDinamicThreshold ();
+}
+
+void addDetect (byte i_c_ad, int minRAD)
+{
+  for (byte i_r_ad = 0; i_r_ad < LENGHTC1 - 1; i_r_ad++)
+  {
+    int shiftAux_ad = c2 [i_c_ad][i_r_ad + 1];
+    c2 [i_c_ad][i_r_ad] = shiftAux_ad;
+  }
+  c2 [i_c_ad][LENGHTC1 - 1] = minRAD;
+}
 void takeMeOut ()
 {
   timeNow = millis ();
@@ -85,3 +134,15 @@ void takeMeOut ()
     Serial.println ("Change Direction");
   }
 }
+
+void avg ()
+{
+  for (int i_c = 0; i_c < NSENSORS; i_c++)
+  {
+    for (int i_r = 0; i_r < LENGHTC1; i_r++)
+    {
+      //
+    }
+  }
+}
+

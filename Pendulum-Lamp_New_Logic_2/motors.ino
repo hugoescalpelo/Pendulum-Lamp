@@ -5,7 +5,7 @@ void ignition ()
   pendulum.write (CENTERPOSITION);
   delay (1000);
   adjustRichter (richter);
-  
+
   timeNow = millis ();
   getTargetTime ();
   targetPosition = positionF;
@@ -13,8 +13,7 @@ void ignition ()
   while (kicks < IGND)
   {
     //printIgnitionMotorMonitor ();
-    readAll ();
-    add ();
+    readAll (); 
     //printValues();
     protoChange ();
     if (lData != aData && aData != 255)
@@ -22,6 +21,10 @@ void ignition ()
       printProtoChange ();
       checkDirection ();
       checkChangeDirection ();
+
+      add ();
+      extractDetect ();
+      avg ();
     }
     if (timeNow > targetTime)
     {
@@ -30,7 +33,7 @@ void ignition ()
       getTargetTime ();
       kicks++;
     }
-    
+
     timeNow = millis ();
   }
 }
