@@ -2,7 +2,7 @@
 
 Servo pendulum;
 
-const byte IGND = 25;
+const byte IGND = 55;
 const byte CENTERPOSITION = 90;
 const byte MAXD = 80;
 const byte MIND = 10;
@@ -39,6 +39,7 @@ int c1 [NSENSORS][LENGHTC1] = {};
 byte i_min_x [NSENSORS] = {};
 int c2 [NSENSORS][LENGHTC1] = {};
 int dinamicThreshold [NSENSORS]= {};
+int avgArray [NSENSORS][2] = {};
 
 void setup() 
 {

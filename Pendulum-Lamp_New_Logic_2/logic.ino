@@ -104,15 +104,31 @@ void extractDetect ()
       {
         dinamicThreshold [i_c] = bd;
       }
-
-
       if (c1 [i_c][LENGHTC1 - 1] < maxR - dinamicThreshold [i_c])
       {
         addDetect (i_c, c1 [i_c][LENGHTC1 - 1]);
       }
     }
+    byte c = 0;
+    int b = 0;
+    for (int i_r = 0; i_r < LENGHTC1; i_r++)
+    {
+      if (c1 [i_c][i_r] > maxR - dinamicThreshold [i_c])
+      {
+        b += c1 [i_c][i_r];
+        c++;
+      }
+    }
+    avgArray [i_c][0] = b / c;
+    b = 0;
+    for (int i_r = 0; i_r < LENGHTC1; i_r++)
+    {
+      b += c2 [i_c][i_r];
+    }
+    avgArray [i_c][1] = b / LENGHTC1;
   }
   printDinamicThreshold ();
+  printAvg ();
 }
 
 void addDetect (byte i_c_ad, int minRAD)
@@ -134,15 +150,3 @@ void takeMeOut ()
     Serial.println ("Change Direction");
   }
 }
-
-void avg ()
-{
-  for (int i_c = 0; i_c < NSENSORS; i_c++)
-  {
-    for (int i_r = 0; i_r < LENGHTC1; i_r++)
-    {
-      //
-    }
-  }
-}
-

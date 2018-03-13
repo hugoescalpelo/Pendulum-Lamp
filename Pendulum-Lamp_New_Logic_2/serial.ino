@@ -63,7 +63,7 @@ void listenPort ()
 
 void printValues ()
 {
-  for (int i = 0; i < NSENSORS; i++)
+  for (byte i = 0; i < NSENSORS; i++)
   {
     Serial.print (bData [i]);
     Serial.print (" ");
@@ -74,9 +74,9 @@ void printValues ()
 void printC1C2 ()
 {
   Serial.println("Readings");
-  for (int i_r = 0; i_r < LENGHTC1; i_r++)
+  for (byte i_r = 0; i_r < LENGHTC1; i_r++)
   {
-    for (int i_c = 0; i_c < NSENSORS; i_c++)
+    for (byte i_c = 0; i_c < NSENSORS; i_c++)
     {
       Serial.print (c1 [i_c][i_r]);
       Serial.print (" ");
@@ -84,9 +84,9 @@ void printC1C2 ()
     Serial.println ();
   }
   Serial.println ("Detect");
-  for (int i_r = 0; i_r < LENGHTC1; i_r++)
+  for (byte i_r = 0; i_r < LENGHTC1; i_r++)
   {
-    for (int i_c = 0; i_c < NSENSORS; i_c++)
+    for (byte i_c = 0; i_c < NSENSORS; i_c++)
     {
       Serial.print (c2 [i_c][i_r]);
       Serial.print (" ");
@@ -103,6 +103,20 @@ void printDinamicThreshold ()
   {
     Serial.print (dinamicThreshold [i_c]);
     Serial.print (" ");
+  }
+  Serial.println ();
+}
+
+void printAvg ()
+{
+  for (byte i_r = 0; i_r < 2; i_r++)
+  {
+    for (byte i_c = 0; i_c < NSENSORS; i_c++)
+    {
+      Serial.print (avgArray [i_c][i_r]);
+      Serial.print (" ");      
+    }
+    Serial.println ();
   }
   Serial.println ();
 }

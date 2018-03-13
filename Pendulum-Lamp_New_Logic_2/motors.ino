@@ -24,7 +24,6 @@ void ignition ()
 
       add ();
       extractDetect ();
-      avg ();
     }
     if (timeNow > targetTime)
     {
