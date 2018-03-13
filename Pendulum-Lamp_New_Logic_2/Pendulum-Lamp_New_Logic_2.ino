@@ -2,7 +2,7 @@
 
 Servo pendulum;
 
-const byte IGND = 55;
+const byte IGND = 21;
 const byte CENTERPOSITION = 90;
 const byte MAXD = 80;
 const byte MIND = 10;
@@ -25,7 +25,7 @@ byte targetPosition;
 byte kicks = 0;
 int mData;
 bool lLampDirection, changeDirection;
-byte diferentialThreshold = 50;
+byte diferentialThreshold = 70;
 
 int bData [NSENSORS] = {};
 byte aData, lData;

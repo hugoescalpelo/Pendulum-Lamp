@@ -14,6 +14,8 @@ void getTargetTime ()
   targetTime = millis () + travelTime;
 }
 
+
+
 void checkDirection ()
 {
   if (aData != lData && aData != 255)
@@ -38,7 +40,7 @@ void checkChangeDirection ()
   {
     changeDirection = 1;
     //printDirection ();
-    printC1C2 ();
+    //printC1C2 ();
   }
   lLampDirection = lampDirection;
 }
@@ -127,8 +129,8 @@ void extractDetect ()
     }
     avgArray [i_c][1] = b / LENGHTC1;
   }
-  printDinamicThreshold ();
-  printAvg ();
+  //printDinamicThreshold ();
+  //printAvg ();
 }
 
 void addDetect (byte i_c_ad, int minRAD)

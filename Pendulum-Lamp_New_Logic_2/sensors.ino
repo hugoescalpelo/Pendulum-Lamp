@@ -15,7 +15,7 @@ void protoChange ()
   lData = aData;
   for (byte i_ra = 0; i_ra < NSENSORS; i_ra++)//Buids the binary data variable to work with
   {
-   if (bData [i_ra] < PROTOTH)//The threshold value determines wich value has to be written
+   if (bData [i_ra] < avgArray [i_ra][0] - dinamicThreshold [i_ra])//The threshold value determines wich value has to be written
     {
       bitClear (aData, i_ra);
     }
