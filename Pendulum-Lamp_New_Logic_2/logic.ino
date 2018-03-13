@@ -129,8 +129,7 @@ void extractDetect ()
     }
     avgArray [i_c][1] = b / LENGHTC1;
   }
-  //printDinamicThreshold ();
-  //printAvg ();
+
 }
 
 void addDetect (byte i_c_ad, int minRAD)
@@ -142,6 +141,7 @@ void addDetect (byte i_c_ad, int minRAD)
   }
   c2 [i_c_ad][LENGHTC1 - 1] = minRAD;
 }
+
 void takeMeOut ()
 {
   timeNow = millis ();

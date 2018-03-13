@@ -10,14 +10,17 @@ void ignition ()
   {
     //printIgnitionMotorMonitor ();
     readAll ();
+    add ();
+    extractDetect ();
 
     //printValues();
     protoChange ();
     if (lData != aData && aData != 255)
     {
-      //printProtoChange ();
-      add ();
-      extractDetect ();
+      printProtoChange ();
+      printDinamicThreshold ();
+      printAvg ();
+
       checkDirection ();
       checkChangeDirection ();
     }
@@ -51,7 +54,16 @@ void setServo ()
     readAll ();
     add ();
   }
-  //for (
+  for (byte i_c = 0; i_c < NSENSORS; i_c++)
+  {
+    int avgAux = 0;
+    for (byte i_r = 0; i_r < LENGHTC1; i_r++)
+    {
+      avgAux += c1 [i_c][i_r];
+    }
+    avgArray [i_c][0] = avgAux / LENGHTC1;
+    dinamicThreshold [i_c] = diferentialThreshold / 2;
+  }
   pendulum.write (45);
   delay (1000);
   pendulum.write (CENTERPOSITION);

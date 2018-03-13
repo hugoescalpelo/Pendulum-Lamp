@@ -109,6 +109,7 @@ void printDinamicThreshold ()
 
 void printAvg ()
 {
+  Serial.println ("Avgs");
   for (byte i_r = 0; i_r < 2; i_r++)
   {
     for (byte i_c = 0; i_c < NSENSORS; i_c++)
