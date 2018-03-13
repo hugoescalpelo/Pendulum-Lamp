@@ -142,7 +142,7 @@ void addDetect (byte i_c_ad, int minRAD)
   c2 [i_c_ad][LENGHTC1 - 1] = minRAD;
 }
 
-void takeMeOut ()
+void poke ()
 {
   timeNow = millis ();
   if (timeNow > targetTime + 2000 && aData == lData)
