@@ -40,6 +40,7 @@ void motorDrive ()
 {
   if (changeDirection == 1)
   {
+    mData = aData;
     changeDirection = 0;
     adjustRichter (richter);
     toogleTargetPosition ();

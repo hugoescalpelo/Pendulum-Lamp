@@ -56,7 +56,7 @@ void listenPort ()
     }
     else if (data == 15)
     {
-      takeMeOut ();
+      poke ();
     }
   }
 }

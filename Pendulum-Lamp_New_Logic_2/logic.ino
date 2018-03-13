@@ -144,11 +144,5 @@ void addDetect (byte i_c_ad, int minRAD)
 
 void poke ()
 {
-  timeNow = millis ();
-  if (timeNow > targetTime + 2000 && aData == lData)
-  {
-    changeDirection = 1;
-    getTargetTime ();
-    Serial.println ("Change Direction");
-  }
+  //
 }

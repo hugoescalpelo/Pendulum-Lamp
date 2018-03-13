@@ -47,6 +47,7 @@
    V5.4.8 Average readengs begin befor ignition
    V5.4.9 Reliable ignition sequence, average based, detect readings fedback
    V5.5 Motor drive continuos form added. First light changin stable version achieved
+   V5.6 Poke sequence prevents stop at missreadng
    
 
    Team:
@@ -61,7 +62,7 @@
 
 Servo pendulum;
 
-const byte IGND = 15;
+const byte IGND = 18;
 const byte CENTERPOSITION = 90;
 const byte MAXD = 80;
 const byte MIND = 10;
@@ -89,9 +90,8 @@ byte diferentialThreshold = 100;
 volatile int bData [NSENSORS] = {};
 byte aData, lData;
 
-int travelTime;
-
 volatile double timeNow;
+volatile int travelTime;
 volatile double targetTime;
 
 volatile int c1 [NSENSORS][LENGHTC1] = {};
@@ -119,7 +119,7 @@ void loop()
   checkDirection ();
   checkChangeDirection ();
   motorDrive ();
-  //poke ();
+  poke ();
   listenPort ();
 
 }
