@@ -1,12 +1,12 @@
 /*
    Iván Abreu Studio.
 
-   13/3/2018
+   22/5/2018
 
    The point of this program is to keep a pendulum lamp moving.
 
-   To get that, we read a sensor array and pull to the oposite side
-   of the array. The array detects the lamp wire, ergo, pendulum positon.
+   To get that, we read a sensor array to know where the lamps' wire
+   is and then its pulled to the oposite side to keep it moving
 
    The max aplitude has to be sustanied. The pendular movement shall no
    stop, no mather what.
@@ -48,7 +48,13 @@
    V5.4.9 Reliable ignition sequence, average based, detect readings fedback
    V5.5 Motor drive continuos form added. First light changin stable version achieved
    V5.6 Poke sequence prevents stop at missreadng
-   
+   V6 Logic changed to work with IR sensor again, like version 4.4
+
+   Notes:
+   Constants: UPPER_SNAKE_CASE
+   variables: camelCase
+   Functions: camelCase
+   index: snake_case
 
    Team:
 
@@ -58,68 +64,51 @@
    Hugo Vargas
 */
 
+//Libraries
 #include <Servo.h>
 
+//Objects
 Servo pendulum;
 
-const byte IGND = 18;
-const byte CENTERPOSITION = 90;
-const byte MAXD = 80;
-const byte MIND = 10;
-const float MINRICHTER = 50;
-const float MAXRICHTER = 85;
-const byte MINFRONT = CENTERPOSITION + MIND;
-const byte MAXFRONT = CENTERPOSITION + MAXD;
-const byte MINBACK = CENTERPOSITION - MIND;
-const byte MAXBACK = CENTERPOSITION - MAXD;
-const int MINTRAVELTIME = 750;
-const int MAXTRAVELTIME = 1500;
-const byte NSENSORS = 8;
-const int PROTOTH = 550;
+//Constants
+const byte SERVO_PIN = 3;
+const int MIN_RICHTER = 50;//In a tenth factor, to avoid write float map
+const int MAX_RICHTER = 85;
+const int FRONT_EXTENSION = 180;
+const int BACK_EXTENSION = 0;
+const int CENTER_POSITION = ((FRONT_EXTENSION - BACK_EXTENSION) / 2) + BACK_EXTENSION;
+const int CENTER_GAP = 10;
+const int OUTER_GAP = 10;
+const int MIN_FRONT = CENTER_POSITION + CENTER_GAP;
+const int MAX_FRONT = FRONT_EXTENSION - OUTER_GAP;
+const int MIN_BACK = CENTER_POSITION - CENTER_GAP;
+const int MAX_BACK = BACK_EXTENSION + OUTER_GAP;
 const byte LENGHT_SMOOTH = 16;
+const byte NSENSORS = 8;
 
-byte richter = 8.4;
-byte positionB, positionF;
-bool lampDirection = 0;
-byte targetPosition;
-byte kicks = 0;
-int mData;
-bool lLampDirection, changeDirection;
-byte diferentialThreshold = 100;
-
-volatile int bData [NSENSORS] = {};
-byte aData, lData;
-
-volatile double timeNow;
-volatile int travelTime;
-volatile double targetTime;
-
-volatile int c1 [NSENSORS][LENGHT_SMOOTH] = {};
-byte i_min_x [NSENSORS] = {};
-volatile int c2 [NSENSORS][LENGHT_SMOOTH] = {};
-volatile int dinamicThreshold [NSENSORS]= {};
-volatile int avgArray [NSENSORS][2] = {};
+//Variables
+int richter = 84;//Start intensity, drives ignition
+int positionBack, positionFront;
+bool sensorData [] = {0,0,0,0,0,0,0,0};
 
 void setup() 
 {
-  Serial.begin (2000000);
+  Serial.begin (2000000);//Highest speed selected, so debug doesnt interfere with operation
   Serial.println ();
-  Serial.println ("Inicio");
+  Serial.println("Inicio");
+  
+  pendulum.attach (SERVO_PIN);//Begin servo
 
-  pendulum.attach (3);
+  for (byte set_pins = 0; set_pins < NSENSORS; set_pins++)
+  {
+    pinMode (set_pins + 4, INPUT);
+  }
 
-  ignition ();
+  ignition ();//This function handles the startup and first readings
 
 }
 
-void loop() 
-{
-  readAll ();
-  protoChange ();
-  checkDirection ();
-  checkChangeDirection ();
-  motorDrive ();
-  poke ();
-  listenPort ();
+void loop() {
+  // put your main code here, to run repeatedly:
 
 }

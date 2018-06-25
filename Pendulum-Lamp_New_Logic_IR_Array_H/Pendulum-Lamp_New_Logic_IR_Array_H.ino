@@ -76,7 +76,7 @@ const int MINTRAVELTIME = 750;
 const int MAXTRAVELTIME = 1500;
 const byte NSENSORS = 8;
 const int PROTOTH = 550;
-const byte LENGHT_SMOOTH = 16;
+const byte LENGHTC1 = 16;
 
 byte richter = 8.4;
 byte positionB, positionF;
@@ -94,9 +94,9 @@ volatile double timeNow;
 volatile int travelTime;
 volatile double targetTime;
 
-volatile int c1 [NSENSORS][LENGHT_SMOOTH] = {};
+volatile int c1 [NSENSORS][LENGHTC1] = {};
 byte i_min_x [NSENSORS] = {};
-volatile int c2 [NSENSORS][LENGHT_SMOOTH] = {};
+volatile int c2 [NSENSORS][LENGHTC1] = {};
 volatile int dinamicThreshold [NSENSORS]= {};
 volatile int avgArray [NSENSORS][2] = {};
 
