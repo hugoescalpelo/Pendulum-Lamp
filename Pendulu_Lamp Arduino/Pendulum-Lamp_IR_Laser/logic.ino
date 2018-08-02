@@ -10,6 +10,7 @@ void adjustRichter (float rch)
 void getTargetTime ()
 {
   int rr = richter * 10;
+  travelTime = map (rr, MINRICHTER, MAXRICHTER, MAXTRAVELTIME, MINTRAVELTIME);
   targetTime = millis () + travelTime;
 }
 
